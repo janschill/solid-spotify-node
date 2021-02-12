@@ -1,103 +1,32 @@
+import dotenv from "dotenv";
 import express from "express";
-import cookieSession from "cookie-session";
-import {
-  getSessionFromStorage,
-  getSessionIdFromStorageAll,
-  Session
-} from "@inrupt/solid-client-authn-node";
+import { Session } from "@inrupt/solid-client-authn-node";
+import { toKebabCase } from "./util/converter"
+
+dotenv.config()
 
 const app = express();
-const port = 3333;
+const port: string | undefined = process.env.SERVER_PORT;
+const appName: string = process.env.APP_NAME || 'SolidSpotify'
+const clientId: string | undefined = process.env.CLIENT_ID
+const clientSecret: string | undefined = process.env.CLIENT_SECRET
+const refreshToken: string | undefined = process.env.REFRESH_TOKEN
+const oidcIssuer: string | undefined = process.env.OIDC_ISSUER
+const resourceUrl: string = `${oidcIssuer}${toKebabCase(appName)}/tracks.ttl`
 
-// The following snippet ensures that the server identifies each user's session
-// with a cookie using an express-specific mechanism
-app.use(
-  cookieSession({
-    name: "session",
-    // These keys are required by cookie-session to sign the cookies.
-    keys: [
-      "Required, but value not relevant for this demo - key1",
-      "Required, but value not relevant for this demo - key2",
-    ],
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-  })
-);
-
-
-app.get("/login", async (req: any, res: any, next: any) => {
-  const session = new Session();
-  // 1. Create a new Session
-  req.session.sessionId = session.info.sessionId;
-  const redirectHandler = (url: string) => {
-    // Since we use Express in this example, we can call `res.redirect` to send the user to the
-    // given URL, but the specific method of redirection depend on your app's particular setup.
-    // For example, if you are writing a command line app, this might simply display a prompt for
-    // the user to visit the given URL in their browser.
-    res.redirect(url);
-  };
-  // 2. Start the login process; redirect handler will handle sending the user to their
-  //    Solid Identity Provider.
-  await session.login({
-    // After login, the Solid Identity Provider will send the user back to the following
-    // URL, with the data necessary to complete the authentication process
-    // appended as query parameters:
-    redirectUrl: `http://localhost:${port}/handle-redirect`,
-    // Set to the user's Solid Identity Provider; e.g., "https://broker.pod.inrupt.com"
-    oidcIssuer: "https://janschill.net",
-    clientName: "Demo app",
-    handleRedirect: redirectHandler,
-  });
-});
-
-app.get("/handle-redirect", async (req: any, res: any) => {
-  // 3. If the user is sent back to the `redirectUrl` provided in step 2,
-  //    it means that the login has been initiated an can be completed. In
-  //    particular, initiating the login stores the session in storage,
-  //    which means it can be retrieved as follows.
-  const session: Session | undefined = await getSessionFromStorage(req.session.sessionId);
-
-  // 4. With your session back from storage, you are now able to
-  //    complete the login process using the data appended to it as query
-  //    parameters in req.url by the Solid Identity Provider:
-  await session!.handleIncomingRedirect(`http://localhost:${port}${req.url}`);
-
-  // 5. `session` now contains an authenticated Session instance.
-  if (session!.info.isLoggedIn) {
-    return res.send(`<p>Logged in with the WebID ${session!.info.webId}.</p>`)
+const session: Session = new Session();
+session.login({
+  clientId: clientId,
+  clientSecret: clientSecret,
+  refreshToken: refreshToken,
+  oidcIssuer: oidcIssuer,
+}).then(() => {
+  if (session.info.isLoggedIn) {
+    session
+      .fetch(resourceUrl)
+      .then((response: any) => {
+        return response.text();
+      })
+      .then(console.log);
   }
-});
-
-// 6. Once you are logged in, you can retrieve the session from storage,
-//    and perform authenticated fetches.
-app.get("/fetch", async (req: any, res: any, next: any) => {
-  const session = await getSessionFromStorage(req.session.sessionId);
-  console.log(await (await session!.fetch(req.query["resource"])).text());
-  res.send("<p>Performed authenticated fetch.</p>");
-});
-
-// 7. To log out a session, just retrieve the session from storage, and
-//    call the .logout method.
-app.get("/logout", async (req: any, res: any, next: any) => {
-  const session = await getSessionFromStorage(req.session.sessionId);
-  session!.logout();
-  res.send(`<p>Logged out.</p>`);
-});
-
-// 8. On the server side, you can also list all registered sessions using the
-//    getSessionIdFromStorageAll function.
-app.get("/", async (req: any, res: any, next: any) => {
-  const sessionIds = await getSessionIdFromStorageAll();
-  for (const sessionId in sessionIds) {
-    // Do something with the session ID...
-  }
-  res.send(
-    `<p>There are currently [${sessionIds.length}] visitors.</p>`
-  );
-});
-
-app.listen(port, () => {
-  console.log(
-    `Server running on port [${port}]. ` +
-    `Visit [http://localhost:${port}/login] to log in to [broker.pod.inrupt.com].`
-  );
 });
