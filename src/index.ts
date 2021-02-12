@@ -17,9 +17,9 @@ const spotifyApi = new SpotifyWebApi({
 spotifyApi.setAccessToken(BEARER_TOKEN);
 
 spotifyApi.getMyTopArtists()
-  .then(function (data) {
+  .then(function (data: any) {
     let topArtists = data.body.items;
     console.log(topArtists);
-  }, function (err) {
+  }, function (err: any) {
     console.log('Something went wrong!', err);
   });
