@@ -1,8 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
-import { SolidClient } from "./client";
+import { SolidClient } from "./solid-client";
 import { toKebabCase } from "./util/converter"
-import { Session } from "@inrupt/solid-client-authn-node"
 
 dotenv.config()
 
