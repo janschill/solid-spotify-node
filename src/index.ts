@@ -1,34 +1,41 @@
-import dotenv from "dotenv";
-import express from "express";
-import { SolidClient } from "./solid-client";
+import { config } from "./configuration"
 import { toKebabCase } from "./util/converter"
 
-dotenv.config()
+import express from "express";
+import { SolidClient } from "./solid-client";
+import { SpotifyClient } from "./spotify-client";
 
 const app = express();
-const port: string = process.env.SERVER_PORT || '3333'
-const appName: string = process.env.APP_NAME || 'SolidSpotify'
-const clientId: string = process.env.CLIENT_ID || 'example-id'
-const clientSecret: string = process.env.CLIENT_SECRET || 'example-secret'
-const refreshToken: string = process.env.REFRESH_TOKEN || 'example-token'
-const oidcIssuer: string = process.env.OIDC_ISSUER || 'https://broker.pod.inrupt.com'
-const privateResourceUrl: string = `https://pod.inrupt.com/jan/${toKebabCase(appName)}/tracks.ttl`
-const publicResourceUrl: string = `https://pod.inrupt.com/jan/public/`
+const privateResourceUrl = `https://pod.inrupt.com/jan/${toKebabCase(config.appName)}/tracks.ttl`
+const publicResourceUrl = `https://pod.inrupt.com/jan/public/`
 
-async function main() {
+
+async function solid() {
   const solidClient = new SolidClient({
-    clientId: clientId,
-    clientSecret: clientSecret,
-    refreshToken: refreshToken,
-    oidcIssuer: oidcIssuer
+    clientId: config.solidClientId,
+    clientSecret: config.solidClientSecret,
+    refreshToken: config.solidRefreshToken,
+    oidcIssuer: config.solidOidcIssuer
   });
 
   await solidClient.login();
 
   if (solidClient.session) {
-    const responsePrivate = await solidClient.fetch(privateResourceUrl);
-    console.log(responsePrivate)
+    const response = await solidClient.fetch(privateResourceUrl);
+    console.log(response)
   }
 }
 
-main()
+async function spotify() {
+  const spotifyClient = new SpotifyClient({
+    clientId: config.spotifyClientId,
+    clientSecret: config.spotifyClientSecret
+  });
+
+  await spotifyClient.login();
+  const response = await spotifyClient.fetch();
+  console.log(response)
+}
+
+// solid()
+spotify()
