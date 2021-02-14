@@ -55,7 +55,7 @@ server.app.use("/", server.router);
 server.app.use(cors());
 server.app.set('views', path.join(__dirname, '/views/'));
 
-server.app.set("view engine", "pug")
+server.app.set("view engine", "ejs")
 
 const port = config.port || 5000;
 
