@@ -1,0 +1,23 @@
+main {
+  padding: 20px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.top-artists {
+  font-size: 0;
+  text-align: center;
+}
+
+.track-cover {
+  height: 320px;
+  width: 320px;
+  object-fit: cover;
+  padding: 5px;
+}
+
+.track-list {
+  display: inline-block;
+}
