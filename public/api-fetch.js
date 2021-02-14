@@ -17,14 +17,14 @@
       return $li;
     }
 
-    const $recentTracksUl = document.querySelector(".top-artists");
+    const $topArtistsUl = document.querySelector(".top-artists");
 
     fetch("api/top-artists")
       .then(response => response.json())
       .then(data => {
         console.log(data[0])
         data.forEach(track => {
-          $recentTracksUl.append(htmlNodeForTrack(track))
+          $topArtistsUl.append(htmlNodeForTrack(track))
         });
         console.log(data)
       })
