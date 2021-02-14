@@ -23,6 +23,11 @@ class ApiRouter {
         console.error(error)
       }
     });
+
+    this._router.get("/save", async (req: Request, res: Response, next: NextFunction) => {
+      const response = await controller.saveToPod();
+      res.status(200).json({ status: "success" });
+    })
   }
 }
 
