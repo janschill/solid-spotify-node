@@ -52,10 +52,11 @@ class Server {
 const server = new Server();
 
 server.app.use("/", server.router);
-server.app.use(cors());
-server.app.set('views', path.join(__dirname, '/views/'));
-
+// server.app.use(cors());
+server.app.set("views", path.join(__dirname, "/views/"));
 server.app.set("view engine", "ejs")
+
+server.app.use(express.static("public"))
 
 const port = config.port || 5000;
 
