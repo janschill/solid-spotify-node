@@ -1,11 +1,11 @@
 import { Router } from "express";
-import LoginRouter from "./login-router"
 import IndexRouter from "./index-router"
+import ApiRouter from "./api-router"
 
 class BaseRouter {
   private _router = Router();
-  private loginRouter = LoginRouter;
   private indexRouter = IndexRouter;
+  private apiRouter = ApiRouter;
 
   get router() {
     return this._router;
@@ -20,7 +20,7 @@ class BaseRouter {
    */
   private _configure() {
     this._router.use("/", this.indexRouter);
-    this._router.use("/login", this.loginRouter);
+    this._router.use("/api", this.apiRouter)
   }
 }
 
