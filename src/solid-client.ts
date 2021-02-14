@@ -1,4 +1,5 @@
 import { Session } from "@inrupt/solid-client-authn-node";
+import { config } from "./configuration";
 
 interface SolidClientConfig {
   clientId: string
@@ -14,11 +15,11 @@ export class SolidClient {
   refreshToken: string
   oidcIssuer: string
 
-  constructor(config: SolidClientConfig) {
-    this.clientId = config.clientId
-    this.clientSecret = config.clientSecret
-    this.refreshToken = config.refreshToken
-    this.oidcIssuer = config.oidcIssuer
+  constructor(conf?: SolidClientConfig) {
+    this.clientId = conf && conf.clientId || config.solidClientId
+    this.clientSecret = conf && conf.clientSecret || config.solidClientSecret
+    this.refreshToken = conf && conf.refreshToken || config.solidRefreshToken
+    this.oidcIssuer = conf && conf.oidcIssuer || config.solidOidcIssuer
     this.session = new Session()
   }
 
