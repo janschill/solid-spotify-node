@@ -11,9 +11,10 @@ export class SpotifyClient {
   clientSecret: string
   scope: string[]
 
-  constructor(config: SpotifyClientConfig) {
-    this.clientId = config.clientId
-    this.clientSecret = config.clientSecret
+  constructor(config?: SpotifyClientConfig) {
+    this.clientId = config && config.clientId || configuration.spotifyClientId
+    this.clientSecret = config && config.clientSecret || configuration.spotifyClientSecret
+    this.redirectUri = config && config.redirectUri || configuration.spotifyRedirectUri
     this.scope = ['user-library-read',
       'user-read-currently-playing',
       'streaming',
