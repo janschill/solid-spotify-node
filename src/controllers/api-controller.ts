@@ -21,10 +21,13 @@ class ApiController {
   async saveToPod() {
     const solidClient = new SolidClient();
     await solidClient.login();
-    const response = await solidClient.fetch("https://pod.inrupt.com/jan/solid-spotify/tracks.ttl");
-    console.log(response)
+    const topArtists = await this.topArtists();
+    await solidClient.clientFetch();
 
-    return response;
+    // const response = await solidClient.fetch("https://pod.inrupt.com/jan/solid-spotify/tracks.ttl");
+    // console.log(response)
+
+    // return response;
   }
 }
 

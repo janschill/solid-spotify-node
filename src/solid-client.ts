@@ -1,5 +1,13 @@
 import { Session } from "@inrupt/solid-client-authn-node";
 import { config } from "./configuration";
+import {
+  getSolidDataset,
+  getThing,
+  getThingAll,
+  getStringNoLocale,
+  getUrlAll
+} from "@inrupt/solid-client";
+import { FOAF, VCARD } from "@inrupt/vocab-common-rdf";
 
 interface SolidClientConfig {
   clientId: string
@@ -38,5 +46,16 @@ export class SolidClient {
         .fetch(url)
         .then((response: any) => response.text());
     }
+  }
+
+  async clientFetch(): Promise<any> {
+    const resourceUrl = "https://pod.inrupt.com/jan/solid-spotify/tracks.ttl"
+    const dataset = await getSolidDataset(
+      resourceUrl, {
+      fetch: this.session.fetch
+    });
+    const resource = getThingAll(dataset);
+
+    console.log(resource)
   }
 }
