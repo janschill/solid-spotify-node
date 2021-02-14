@@ -1,14 +1,17 @@
-import SpotifyWebApi from 'spotify-web-api-node'
+import SpotifyWebApi from 'spotify-web-api-node';
+import { config as configuration } from "./configuration"
 
 interface SpotifyClientConfig {
   clientId: string
   clientSecret: string
+  redirectUri: string
 }
 
 export class SpotifyClient {
   session: SpotifyWebApi
   clientId: string
   clientSecret: string
+  redirectUri: string
   scope: string[]
 
   constructor(config?: SpotifyClientConfig) {
@@ -22,7 +25,8 @@ export class SpotifyClient {
       'user-read-recently-played']
     this.session = new SpotifyWebApi({
       clientId: this.clientId,
-      clientSecret: this.clientSecret
+      clientSecret: this.clientSecret,
+      redirectUri: this.redirectUri
     })
   }
 
@@ -31,6 +35,13 @@ export class SpotifyClient {
     console.log(url)
     const data = await this.session.clientCredentialsGrant();
     this.session.setAccessToken(data.body['access_token'])
+
+    const authorizeURL = this.session.createAuthorizeURL(
+      this.scope,
+      'state'
+    );
+    console.log(authorizeURL)
+
     return data
 
     // _this.session.clientCredentialsGrant().then(data => {
@@ -47,9 +58,10 @@ export class SpotifyClient {
 
   async fetch() {
     console.log('fetch', this.session.getAccessToken())
-    this.session.getMyTopArtists()
+    return this.session.getMyTopArtists()
       .then(function (data: any) {
         const topArtists = data.body.items;
+        console.log(topArtists[0])
         return topArtists;
       }, function (err: any) {
         console.log(JSON.stringify(err));
