@@ -1,5 +1,6 @@
-import { config } from '../configuration';
-import { SpotifyClient } from '../spotify-client';
+import { config } from "../configuration";
+import { SolidClient } from "../solid-client";
+import { SpotifyClient } from "../spotify-client";
 
 class ApiController {
   default() {

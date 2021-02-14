@@ -13,19 +13,19 @@ import BaseRouter from "./routers/base";
 // const publicResourceUrl = `https://pod.inrupt.com/jan/public/`
 
 // async function solid() {
-//   const solidClient = new SolidClient({
-//     clientId: config.solidClientId,
-//     clientSecret: config.solidClientSecret,
-//     refreshToken: config.solidRefreshToken,
-//     oidcIssuer: config.solidOidcIssuer
-//   });
+// const solidClient = new SolidClient({
+//   clientId: config.solidClientId,
+//   clientSecret: config.solidClientSecret,
+//   refreshToken: config.solidRefreshToken,
+//   oidcIssuer: config.solidOidcIssuer
+// });
 
-//   await solidClient.login();
+// await solidClient.login();
 
-//   if (solidClient.session) {
-//     const response = await solidClient.fetch(privateResourceUrl);
-//     console.log(response)
-//   }
+// if (solidClient.session) {
+//   const response = await solidClient.fetch(privateResourceUrl);
+//   console.log(response)
+// }
 // }
 
 // async function spotify() {

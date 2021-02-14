@@ -36,9 +36,7 @@ export class SolidClient {
     if (this.session.info.isLoggedIn) {
       return this.session
         .fetch(url)
-        .then((response: any) => {
-          return response.text();
-        });
+        .then((response: any) => response.text());
     }
   }
 }
