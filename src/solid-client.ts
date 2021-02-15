@@ -7,7 +7,7 @@ import {
   getStringNoLocale,
   getUrlAll
 } from "@inrupt/solid-client";
-import { FOAF, VCARD } from "@inrupt/vocab-common-rdf";
+import { FOAF, VCARD, SCHEMA_INRUPT_EXT } from "@inrupt/vocab-common-rdf";
 
 interface SolidClientConfig {
   clientId: string
@@ -50,12 +50,19 @@ export class SolidClient {
 
   async clientFetch(): Promise<any> {
     const resourceUrl = "https://pod.inrupt.com/jan/solid-spotify/tracks.ttl"
+    const profileUrl = "https://docs-example.inrupt.net/profile/card"
     const dataset = await getSolidDataset(
-      resourceUrl, {
+      profileUrl, {
       fetch: this.session.fetch
     });
-    const resource = getThingAll(dataset);
+    const profile = getThing(
+      dataset,
+      `${profileUrl}#me`
+    );
 
-    console.log(resource)
+    const track = getStringNoLocale(profile, SCHEMA_INRUPT_EXT.MusicRecording);
+    console.log(track)
+
+    console.log(track)
   }
 }

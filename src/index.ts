@@ -9,24 +9,18 @@ import { config } from "./configuration"
 import { toKebabCase } from "./util/converter"
 import BaseRouter from "./routers/base";
 
-// const privateResourceUrl = `https://pod.inrupt.com/jan/${toKebabCase(config.appName)}/tracks.ttl`
+
+const privateResourceUrl = `https://pod.inrupt.com/jan/${toKebabCase(config.appName)}/tracks.ttl`
 // const publicResourceUrl = `https://pod.inrupt.com/jan/public/`
 
-// async function solid() {
-// const solidClient = new SolidClient({
-//   clientId: config.solidClientId,
-//   clientSecret: config.solidClientSecret,
-//   refreshToken: config.solidRefreshToken,
-//   oidcIssuer: config.solidOidcIssuer
-// });
+async function solid() {
 
-// await solidClient.login();
-
-// if (solidClient.session) {
-//   const response = await solidClient.fetch(privateResourceUrl);
-//   console.log(response)
-// }
-// }
+  const solidClient = new SolidClient();
+  await solidClient.login();
+  // const topArtists = await this.topArtists();
+  await solidClient.clientFetch();
+}
+solid()
 
 // async function spotify() {
 //   const spotifyClient = new SpotifyClient({
