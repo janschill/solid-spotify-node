@@ -60,9 +60,9 @@ export class SolidClient {
       `${profileUrl}#me`
     );
 
-    const track = getStringNoLocale(profile, SCHEMA_INRUPT_EXT.MusicRecording);
-    console.log(track)
+    // const track = getStringNoLocale(profile, SCHEMA_INRUPT_EXT.MusicRecording);
+    // console.log(track)
 
-    console.log(track)
+    // console.log(track)
   }
 }

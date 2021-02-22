@@ -12,5 +12,6 @@ export const config = {
   spotifyClientId: process.env.SPOTIFY_CLIENT_ID || 'SPOTIFY_CLIENT_ID',
   spotifyClientSecret: process.env.SPOTIFY_CLIENT_SECRET || 'SPOTIFY_CLIENT_SECRET',
   spotifyRedirectUri: process.env.SPOTIFY_REDIRECT_URI || 'SPOTIFY_REDIRECT_URI',
-  spotifyAccessToken: process.env.SPOTIFY_ACCESS_TOKEN || 'SPOTIFY_ACCESS_TOKEN'
+  spotifyAccessToken: process.env.SPOTIFY_ACCESS_TOKEN || 'SPOTIFY_ACCESS_TOKEN',
+  janschillPW: process.env.JANSCHILL_PASSWORD || 'no-password'
 }

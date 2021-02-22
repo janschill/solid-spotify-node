@@ -9,12 +9,10 @@ import { config } from "./configuration"
 import { toKebabCase } from "./util/converter"
 import BaseRouter from "./routers/base";
 
-
 const privateResourceUrl = `https://pod.inrupt.com/jan/${toKebabCase(config.appName)}/tracks.ttl`
 // const publicResourceUrl = `https://pod.inrupt.com/jan/public/`
 
 async function solid() {
-
   const solidClient = new SolidClient();
   await solidClient.login();
   // const topArtists = await this.topArtists();
